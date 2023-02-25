@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zs.EspMeteo.Parser", "Zs.EspMeteo.Parser\Zs.EspMeteo.Parser.csproj", "{CE71C468-5046-47A5-B7EF-64040B8E346D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zs.EspMeteo.Parser.Tests", "Zs.EspMeteo.Parser.Tests\Zs.EspMeteo.Parser.Tests.csproj", "{D9816595-7656-4A69-98D8-1D3BFF815DA5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CE71C468-5046-47A5-B7EF-64040B8E346D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE71C468-5046-47A5-B7EF-64040B8E346D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE71C468-5046-47A5-B7EF-64040B8E346D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE71C468-5046-47A5-B7EF-64040B8E346D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D9816595-7656-4A69-98D8-1D3BFF815DA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9816595-7656-4A69-98D8-1D3BFF815DA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9816595-7656-4A69-98D8-1D3BFF815DA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9816595-7656-4A69-98D8-1D3BFF815DA5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
