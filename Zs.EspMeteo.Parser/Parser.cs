@@ -15,15 +15,20 @@ using static Zs.EspMeteo.Parser.Models.FaultCodes;
 
 namespace Zs.EspMeteo.Parser;
 
-public class Parser
+public class EspMeteoParser
 {
-    public async Task<Models.EspMeteo> Parse(string url)
+    private const StringSplitOptions SplitOptions = StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries;
+
+    public async Task<Models.EspMeteo> ParseAsync(string uri)
     {
-        var espMeteoPageHtml = await ApiHelper.GetAsync(url);
+        var espMeteoPageHtml = await ApiHelper.GetAsync(uri);
 
         EnsureHtmlIsValid(espMeteoPageHtml);
 
-        return ParseInternal(espMeteoPageHtml);
+        var sensors = GetSensors(espMeteoPageHtml);
+        var espMeteo = new Models.EspMeteo(uri, sensors);
+
+        return espMeteo;
     }
 
     protected void EnsureHtmlIsValid(string espMeteoPageHtml)
@@ -37,7 +42,8 @@ public class Parser
             throw new FaultException(fault);
         }
     }
-    protected internal Models.EspMeteo ParseInternal(string html)
+
+    protected internal IReadOnlyList<Sensor> GetSensors(string html)
     {
         var xml = html.RepairXml();
 
@@ -70,10 +76,10 @@ public class Parser
             }
         }
 
-        return new Models.EspMeteo(sensors);
+        return sensors;
     }
 
-    private Sensor GetSensor(ref XmlNode node, IEnumerator sensorDivEnumerator)
+    private static Sensor GetSensor(ref XmlNode node, IEnumerator sensorDivEnumerator)
     {
         var sensorName = node.InnerText.TrimEnd(':');
         var parameterRows = new List<string>();
@@ -93,7 +99,7 @@ public class Parser
         }
 
         var parameters = parameterRows
-            .SelectMany(r => r.Split(". ", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+            .SelectMany(r => r.Split(". ", SplitOptions)
                 .Select(ToFloatParameter));
 
         return new Sensor(sensorName, parameters);
@@ -101,10 +107,9 @@ public class Parser
 
     private static Parameter ToFloatParameter(string parameter)
     {
-        var splitOptions = StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries;
-        var nameAndValueWithUnit = parameter.Split(':', splitOptions);
+        var nameAndValueWithUnit = parameter.Split(':', SplitOptions);
         var name = nameAndValueWithUnit[0].Trim();
-        var valueAndUnit = nameAndValueWithUnit[1].Trim('.', ' ').Split(' ', splitOptions);
+        var valueAndUnit = nameAndValueWithUnit[1].Trim('.', ' ').Split(' ', SplitOptions);
         var value = float.Parse(valueAndUnit[0]);
         var unit = valueAndUnit[1];
 

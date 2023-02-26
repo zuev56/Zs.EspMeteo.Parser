@@ -11,14 +11,14 @@ public sealed class ParserTestsShould
     [InlineData("Assets/EspMeteoPage_Dht_1.html", 1)]
     [InlineData("Assets/EspMeteoPage_Dht_2.html", 1)]
     [InlineData("Assets/EspMeteoPage_Dht_1_&_Dht_2.html", 2)]
-    public void ParseHtmlToEspMeteoInstance(string partialPath, int externalSensorsAmount)
+    public void GetSensorsFromHtml(string partialPath, int externalSensorsAmount)
     {
         var html = GetFileContentByPartialPath(partialPath);
-        var parser = new Parser();
-        var espMeteo = parser.ParseInternal(html);
+        var parser = new EspMeteoParser();
+        var sensors = parser.GetSensors(html);
 
-        espMeteo.Sensors.Count.Should().Be(1 + externalSensorsAmount);
-        espMeteo.Sensors.Should().Contain(s => s.Name == "BMP085/180");
+        sensors.Count.Should().Be(1 + externalSensorsAmount);
+        sensors.Should().Contain(s => s.Name == "BMP085/180");
     }
 
     private string GetFileContentByPartialPath(string partialPath)
