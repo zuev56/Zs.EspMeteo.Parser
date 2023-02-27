@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using Zs.Common.Exceptions;
 using Zs.Common.Models;
-using Zs.Common.Services.WebAPI;
+using Zs.Common.Services.Http;
 using Zs.EspMeteo.Parser.Models;
 using static Zs.EspMeteo.Parser.Models.FaultCodes;
 
@@ -21,7 +21,7 @@ public class EspMeteoParser
 
     public async Task<Models.EspMeteo> ParseAsync(string uri)
     {
-        var espMeteoPageHtml = await ApiHelper.GetAsync(uri);
+        var espMeteoPageHtml = await Request.GetAsync(uri);
 
         EnsureHtmlIsValid(espMeteoPageHtml);
 

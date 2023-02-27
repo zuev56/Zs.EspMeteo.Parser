@@ -6,7 +6,7 @@
         <Nullable>enable</Nullable>
         <PublishTrimmed>true</PublishTrimmed>
         <PackageId>Zs.EspMeteo.Parser</PackageId>
-        <Version>7.0.1</Version>
+        <Version>7.0.2</Version>
         <Authors>zuev56 (Sergei Zuev)</Authors>
         <Company>zuev56 (Sergei Zuev)</Company>
         <RepositoryUrl>https://github.com/zuev56/Zs.EspMeteo.Parser</RepositoryUrl>
@@ -14,7 +14,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Zs.Common.Services" Version="6.0.8" />
+      <PackageReference Include="Zs.Common.Services" Version="7.0.0-preview-1" />
     </ItemGroup>
 
 </Project>
