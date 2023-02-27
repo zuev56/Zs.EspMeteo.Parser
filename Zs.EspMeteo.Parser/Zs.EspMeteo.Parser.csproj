@@ -5,6 +5,7 @@
         <ImplicitUsings>disable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <PublishTrimmed>true</PublishTrimmed>
+        <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
         <PackageId>Zs.EspMeteo.Parser</PackageId>
         <Version>7.0.2</Version>
         <Authors>zuev56 (Sergei Zuev)</Authors>
