@@ -21,26 +21,26 @@ public class EspMeteoParser
 
     public async Task<Models.EspMeteo> ParseAsync(string uri)
     {
-        var espMeteoPageHtml = await Request.GetAsync(uri);
+        var espMeteoPageHtml = await Request.Create(uri).GetAsync<string>();
 
         EnsureHtmlIsValid(espMeteoPageHtml);
 
-        var sensors = GetSensors(espMeteoPageHtml);
+        var sensors = GetSensors(espMeteoPageHtml!);
         var espMeteo = new Models.EspMeteo(uri, sensors);
 
         return espMeteo;
     }
 
-    protected void EnsureHtmlIsValid(string espMeteoPageHtml)
+    protected void EnsureHtmlIsValid(string? espMeteoPageHtml)
     {
         // TODO: improve validation
-        var isValidHtml = espMeteoPageHtml.Contains("<title>ESPMETEO</title>");
+        var isValidHtml = espMeteoPageHtml?.Contains("<title>ESPMETEO</title>") == true;
 
-        if (!isValidHtml)
-        {
-            var fault = new Fault(InvalidEspMeteoPageHtml);
-            throw new FaultException(fault);
-        }
+        if (isValidHtml)
+            return;
+
+        var fault = new Fault(InvalidEspMeteoPageHtml);
+        throw new FaultException(fault);
     }
 
     protected internal IReadOnlyList<Sensor> GetSensors(string html)
@@ -54,7 +54,8 @@ public class EspMeteoParser
 
         var sensors = new List<Sensor>();
 
-        var sensorDivEnumerator = sensorsDiv.ChildNodes.GetEnumerator();
+        using var xmlNodeList = sensorsDiv.ChildNodes;
+        var sensorDivEnumerator = xmlNodeList.GetEnumerator();
         while (sensorDivEnumerator.MoveNext())
         {
             var currentNode = (XmlNode)sensorDivEnumerator.Current!;
@@ -68,9 +69,7 @@ public class EspMeteoParser
                     sensors.Add(sensor);
 
                     if (currentNode.Name == "b")
-                    {
                         continue;
-                    }
                 }
                 isUnfinished = false;
             }
@@ -88,14 +87,10 @@ public class EspMeteoParser
         {
             node = (XmlNode)sensorDivEnumerator.Current!;
             if (node.Name == "b")
-            {
                 break;
-            }
 
             if (node.NodeType == XmlNodeType.Text)
-            {
                 parameterRows.Add(node.InnerText);
-            }
         }
 
         var parameters = parameterRows
