@@ -2,12 +2,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Xml;
 using Zs.Common.Exceptions;
 using Zs.Common.Models;
-using Zs.Common.Services.Http;
 using Zs.EspMeteo.Parser.Models;
 using static Zs.EspMeteo.Parser.Models.FaultCodes;
 
@@ -21,7 +21,8 @@ public class EspMeteoParser
 
     public async Task<Models.EspMeteo> ParseAsync(string uri)
     {
-        var espMeteoPageHtml = await Request.Create(uri).GetAsync<string>();
+        using var httpClient = new HttpClient();
+        var espMeteoPageHtml = await httpClient.GetStringAsync(uri);
 
         EnsureHtmlIsValid(espMeteoPageHtml);
 
